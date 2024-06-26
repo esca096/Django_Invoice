@@ -13,7 +13,7 @@ class HomeView(View):
     """ Main View """
     
     template_name = 'index.html'
-    invoices = Invoice.objects.select_related('customer', 'save_by').all()
+    invoices = Invoice.objects.select_related('customer', 'save_by').all().order_by('-invoice_date')
     
     context = {
         'invoices':invoices
@@ -168,3 +168,25 @@ class AddInvoiceView(View):
             messages.error(request, f"Sorry the following error has occured {e}.")
         return render(request, self.template_name,  self.context)
         
+        
+        
+class InvoiceVisualizationView(View):
+    """ This view helps vizualize the invoices"""
+    
+    template_name = 'invoice.html'
+    
+    
+    def get(self, request, *args, **kwargs):
+        
+        pk = kwargs.get('pk')
+        
+        obj = Invoice.objects.get(pk=pk)
+        
+        articles = obj.article_set.all()
+        
+        context ={
+            'obj':obj,
+            'articles':articles
+        }
+        
+        return render(request, self.template_name, context)
