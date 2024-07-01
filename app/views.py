@@ -4,8 +4,12 @@ from django.views import View
 from .models import *
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.db import transaction
 from .utils import paginator, get_invoice
+from .decorator import *
 
 import pdfkit
 from django.template.loader import get_template
@@ -15,7 +19,7 @@ import datetime
 
 # Create your views here.
 
-class HomeView(View):
+class HomeView(LoginRequiredSuperUserMixin, View):
     """ Main View """
     
     template_name = 'index.html'
@@ -75,7 +79,7 @@ class HomeView(View):
         return render(request, self.template_name, self.context)
     
     
-class AddCustomerView(View):
+class AddCustomerView(LoginRequiredSuperUserMixin,View):
     """ Add new Customer"""
     
     template_name = 'add_customer.html'
@@ -113,7 +117,7 @@ class AddCustomerView(View):
         return render(request, self.template_name)
     
     
-class AddInvoiceView(View):
+class AddInvoiceView(LoginRequiredSuperUserMixin, View):
     """ add a new invoice view"""
         
     template_name = 'add_invoice.html'
@@ -176,7 +180,7 @@ class AddInvoiceView(View):
         
         
         
-class InvoiceVisualizationView(View):
+class InvoiceVisualizationView(LoginRequiredSuperUserMixin,View):
     """ This view helps vizualize the invoices"""
     
     template_name = 'invoice.html'
@@ -190,7 +194,7 @@ class InvoiceVisualizationView(View):
         return render(request, self.template_name, context)
     
    
-   
+@superuser_required   
 def get_invoice_pdf(request, *args, **kwargs):
     """  generate the pdf file  from html file """
     
