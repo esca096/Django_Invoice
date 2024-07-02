@@ -14,6 +14,8 @@ from .decorator import *
 import pdfkit
 from django.template.loader import get_template
 
+from django.utils.translation import gettext as _
+
 import datetime 
 
 
@@ -52,7 +54,7 @@ class HomeView(LoginRequiredSuperUserMixin, View):
                 else:
                     obj.paid = False
                 obj.save()
-                messages.success(request, "change made successfully")
+                messages.success(request, _("change made successfully"))
                 
             except Exception as e:
                 messages.error(request, f"Sorry the following error has occured {e}.")
@@ -66,7 +68,7 @@ class HomeView(LoginRequiredSuperUserMixin, View):
                 
                 obj.delete()
                 
-                messages.success(request, 'the deletion was successfully')
+                messages.success(request, _('the deletion was successfully'))
             
             except Exception as e:
                 messages.error(request, f"Sorry the following error has occured {e}.")
@@ -105,10 +107,10 @@ class AddCustomerView(LoginRequiredSuperUserMixin,View):
             created = Customer.objects.create(**data)
             
             if created:
-                messages.success(request, "Customer registered successfully")
+                messages.success(request, _("Customer registered successfully"))
                 
             else:
-                messages.error(request, "Sorry, Please try again!!! the sent data ")
+                messages.error(request, _("Sorry, Please try again!!! the sent data "))
                 
         except Exception as e:
             
@@ -170,9 +172,9 @@ class AddInvoiceView(LoginRequiredSuperUserMixin, View):
             created = Article.objects.bulk_create(items)
             
             if created:
-                messages.success(request, "Data save successfully")
+                messages.success(request, _("Data save successfully"))
             else:
-                messages.error(request, "Sorry!!!, try again")
+                messages.error(request, _("Sorry!!!, try again"))
                 
         except Exception as e:
             messages.error(request, f"Sorry the following error has occured {e}.")
